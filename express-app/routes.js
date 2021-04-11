@@ -16,7 +16,8 @@ router.get("/print", function (req, res) {
     console.log('try to print file: ' + filename);
 
     console.log('default printer: ', printer.getDefaultPrinterName());
-    process.env[3] = 'Microsoft XPS Document Writer';
+    // process.env[3] = 'Microsoft XPS Document Writer';
+    process.env[3] = 'Microsoft Print to PDF';
 
     const pr = printer.getPrinter(process.env[3]);
     console.log('set print :',pr)
@@ -47,6 +48,11 @@ router.get("/print", function (req, res) {
         });
     }
     res.render("index", { title: "Express" });
+});
+
+router.get("/get-all-printer", function (req, res) {
+    const pr =  printer.getPrinters();
+    res.json(pr);
 });
 
 module.exports = router;
