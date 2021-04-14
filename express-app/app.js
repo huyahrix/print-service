@@ -30,6 +30,21 @@ app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
+
+app.use(function (req, res, next) {
+  res.ok = (data) => {
+      const d = data && typeof data.data !== 'undefined' ? data : {data: data};
+      return res.json(Object.assign({code: 200, message: ''}, d));
+  };
+  res.badRequest = (data) => {
+      if (data instanceof Error) {
+          return res.json(Object.assign({ code: data.code || 'ERROR', message: data.message || '' }, { data: null }));
+      }
+      return res.json(Object.assign({ code: 'ERROR', message: '' }, data, { data: null }));
+  };
+  next();
+});
+
 app.use("/", routes);
 
 // catch 404 and forward to error handler

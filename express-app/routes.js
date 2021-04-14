@@ -4,20 +4,23 @@ const express = require("express"),
 var printer = require("printer"),
     filename = process.argv[2] || __filename;
 
+const PrinterController = require('./controllers/PrinterController')
+
 //GET home page.
 router.get("/", function (req, res) {
     res.render("index", { title: "Express" });
 });
 
 // print
-router.get("/print", function (req, res) {
+router.post("/print", function (req, res) {
     // use: node printFile.js [filePath printerName]
     console.log('platform:', process.platform);
     console.log('try to print file: ' + filename);
 
     console.log('default printer: ', printer.getDefaultPrinterName());
-    // process.env[3] = 'Microsoft XPS Document Writer';
-    process.env[3] = 'Microsoft Print to PDF';
+    
+    process.env[3] = 'HP LaserJet P2035';
+    // process.env[3] = 'Microsoft Print to PDF';
 
     const pr = printer.getPrinter(process.env[3]);
     console.log('set print :',pr)
@@ -50,9 +53,6 @@ router.get("/print", function (req, res) {
     res.render("index", { title: "Express" });
 });
 
-router.get("/get-all-printer", function (req, res) {
-    const pr =  printer.getPrinters();
-    res.json(pr);
-});
+router.get('*/printer/list-printer', PrinterController.listPrinters);
 
 module.exports = router;
