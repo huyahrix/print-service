@@ -23,11 +23,18 @@ const { ipcRenderer } = require("electron"),
   // ),
 
   app = require("electron").remote.app,
-  node = spawn(".\\node_modules\\node\\bin\\node.exe", ["./express-app/server.js"], {
+  node = spawn(".\\node_modules\\node\\bin\\node.exe", ["./windows-services/install.js"], {
     cwd: app.getAppPath()
   }),
   request = require("request"),
   _ = require("lodash");
+
+  // app = require("electron").remote.app,
+  // node = spawn(".\\node_modules\\node\\bin\\node.exe", ["./express-app/server.js"], {
+  //   cwd: app.getAppPath()
+  // }),
+  // request = require("request"),
+  // _ = require("lodash");
 
 ipcRenderer.on("stop-server", (event, data) => {
   // This is okay for now but there is a better solution. We can use IPC to
