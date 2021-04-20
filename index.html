@@ -50,15 +50,11 @@
     }
   </style>
 
-  <!-- <script> -->
-  <!-- // require('./assets/js/ipc'); -->
-  <!-- <script type="text/javascript" src="assets/js/ipc.js"></script> -->
-  <!-- </script> -->
   <script>
     let { remote } = require("electron");
-
     const { PosPrinter } = remote.require("electron-pos-printer");
     const path = require("path");
+    const axios = require('axios');
 
     const data = [
       {
@@ -331,61 +327,6 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
 </html>`,
       }
     ];
-
-    //     const data = [
-    //       {
-    //         type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-    //         value: "||---",
-    //         style: `text-align:left;`,
-    //         css: { "font-size": "12px" },
-    //       },
-    //       {
-    //         type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-    //         value: "HEADER",
-    //         style: `text-align:center;`,
-    //         css: { "font-weight": "700", "font-size": "18px" },
-    //       },
-    //       {
-    //         type: "image",
-    //         path: path.join(__dirname, "assets/img_test.png"), // file path
-    //         position: "center", // position of image: 'left' | 'center' | 'right'
-    //         width: "auto", // width of image in px; default: auto
-    //         height: "60px", // width of image in px; default: 50 or '50px'
-    //       },
-    //       {
-    //         type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table'
-    //         value:
-    //           "Lorem ipsum<br><br> . , ; : ( ) - + = ! # % \" ' <br><br> ã Ã ç Ç $ & @ ê Ê í Í<br><br> 0 1 2 3 4 5 6 7 8 9 <br>a b c d e f g h i j k l m n o p q r s t u v w x y z<br>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br><br><hr><br>elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation \n ullamco \n laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum<br>",
-
-    //         css: {
-    //           "font-size": "12px",
-    //           "font-family": "sans-serif",
-    //           "text-align": "center",
-    //         },
-    //       },
-    //       {
-    //         type: "barCode", // Do you think the result is ugly? Me too. Try use an image instead...
-    //         value: "HB4587896",
-    //         height: 12,
-    //         width: 1,
-    //         displayValue: true, // Display value below barcode
-    //         fontsize: 8,
-    //       },
-    //       {
-    //         type: "qrCode",
-    //         value: "https://github.com/fssonca",
-    //         height: 80,
-    //         width: 80,
-    //         style: "margin-left:50px",
-    //       },
-    //       {
-    //         type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-    //         value: "---||",
-    //         style: `text-align:right;`,
-    //         css: { "font-size": "12px" },
-    //       },
-    //     ];
-
     function date() {
       const x = new Date();
 
@@ -429,7 +370,7 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
       let widthPage;
 
       var p = document.getElementsByName("printer");
-      var w = document.getElementsByName("width");
+      // var w = document.getElementsByName("width");
 
       for (var i = 0, length = p.length; i < length; i++) {
         if (p[i].checked) {
@@ -439,43 +380,69 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
         }
       }
 
-      for (var i = 0, length = w.length; i < length; i++) {
-        if (w[i].checked) {
-          widthPage = w[i].value;
+      console.log('printerName', printerName);
 
+      if (printerName) {
+
+        var myHeaders = new Headers();
+        myHeaders.append("secret", "b7z2x8a4v2n9m3l5k9j3h5a8s4d3f4w3f1sy4g");
+
+        var formdata = new FormData();
+        formdata.append("PrinterName", printerName);
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: formdata,
+          redirect: 'follow'
+        };
+
+        fetch("http://localhost:3000/api/printer/print-test", requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+
+      } else {
+        alert("Select the printer");
+      }
+    };
+
+    function setDefault() {
+      let printerName;
+      var p = document.getElementsByName("printer");
+
+      for (var i = 0, length = p.length; i < length; i++) {
+        if (p[i].checked) {
+          printerName = p[i].value;
           break;
         }
       }
 
-      console.log(printerName, widthPage);
+      if (printerName) {
+        var data = JSON.stringify({
+          "PrinterName": printerName
+        });
 
-      const options = {
-        preview: false, // Preview in window or print
-        width: widthPage, //  width of content body
-        margin: "0 0 0 0", // margin of content body
-        copies: 1, // Number of copies to print
-        printerName: printerName, // printerName: string, check it at webContent.getPrinters()
-        timeOutPerLine: 400,
-        silent: true,
-      };
+        var config = {
+          method: 'put',
+          url: 'http://localhost:3000/api/printer/default-printer',
+          headers: {
+            'secret': 'b7z2x8a4v2n9m3l5k9j3h5a8s4d3f4w3f1sy4g',
+            'Content-Type': 'application/json'
+          },
+          data: data
+        };
 
-      const now = {
-        type: "text",
-        value: "" + date(),
-        style: `text-align:center;`,
-        css: { "font-size": "12px", "font-family": "sans-serif" },
-      };
-
-      const d = [...data, now];
-
-      if (printerName && widthPage) {
-        PosPrinter.print(d, options)
-          .then(() => { })
-          .catch((error) => {
-            console.error(error);
+        axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
           });
-      } else {
-        alert("Select the printer and the width");
+      }
+      else {
+        alert("Select the printer");
       }
     }
   </script>
@@ -525,6 +492,15 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
           <br>
           <input onclick="print()" type="button" value="printer test"
             style="background: #f3ca63; color: #1a1d21 !important;" />
+
+          <input onclick="setDefault()" type="button" value="Default"
+            style="background: #f3ca63; color: #1a1d21 !important;" />
+
+          <input onclick="installServices()" type="button" value="install"
+            style="background: #f3ca63; color: #1a1d21 !important;" />
+
+          <input onclick="uninstallServices()" type="button" value="uninstall"
+            style="background: #f3ca63; color: #1a1d21 !important;" />
         </div>
       </div>
 
@@ -555,6 +531,7 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
   <script>
     require('./assets/js/ipc');
   </script>>
+
 </body>
 
 </html>

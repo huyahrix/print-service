@@ -23,7 +23,7 @@ const { ipcRenderer } = require("electron"),
   // ),
 
   app = require("electron").remote.app,
-  node = spawn(".\\node_modules\\node\\bin\\node.exe", ["./windows-services/install.js"], {
+  node = spawn(".\\node_modules\\node\\bin\\node.exe", ["./express-app/server.js"], {
     cwd: app.getAppPath()
   }),
   request = require("request"),

@@ -1,5 +1,5 @@
 {
-  "name": "electron-with-express",
+  "name": "printer-services",
   "description": "Demonstrates spawning Express from Electron and using it to serve content",
   "version": "0.15.0",
   "main": "main.js",
@@ -12,11 +12,13 @@
     "start": ".\\node_modules\\node\\bin\\node.exe start-electron.js",
     "package-win-portable": "npx electron-builder build --win=portable",
     "package-win": "npx electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/print.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE",
-    "package": "npx electron-packager . --overwrite --platform=win32 --arch=x64 --icon=assets/icons/win/print.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron-With-Express\""
+    "package": "npx electron-packager . --overwrite --platform=win32 --arch=x64 --icon=assets/icons/win/print.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Printer-Services\""
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "electron-builder": "^22.10.5",
     "electron-pos-printer": "^1.2.4",
+    "form-data": "^4.0.0",
     "lodash": "^4.17.20",
     "node": "^10.18.0",
     "request": "^2.88.2",

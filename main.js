@@ -7,7 +7,7 @@ function createWindow() {
     autoHideMenuBar: false,
     frame: true,
     // titleBarStyle: 'hidden',
-    width: 940,
+    width: 1040,
     height: 680,
     webPreferences: {
       nodeIntegration: true,
