@@ -83,12 +83,6 @@ redirectOutput(node.stdout);
 redirectOutput(node.stderr);
 
 let { remote } = require("electron");
-// console.log(process.versions.electron);
-
-// const { PosPrinter } = remote.require("electron-pos-printer");
-// // const {PosPrinter} = require("electron-pos-printer"); //dont work in production (??)
-
-// const path = require("path");
 
 let webContents = remote.getCurrentWebContents();
 let printers = webContents.getPrinters(); //list the printers
@@ -110,13 +104,6 @@ printers.map((item, index) => {
 let checkServerRunning = setInterval(() => {
   request(expressAppUrl, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      // document.getElementById("expressApp").src = expressAppUrl;
-
-      // document.getElementById("print").style.display = "none";
-      // document.getElementById("serverLog").style.display = "block";
-
-      // document.getElementById("print").style.display = "block";
-      // document.getElementById("serverLog").style.display = "none";
       clearInterval(checkServerRunning);
     }
   });

@@ -14,8 +14,9 @@ const PrinterController = {
     print: async (req, res) => {
         console.log('===== print');
         const params = req.body;
-        console.log(params)
+        console.log('params', params)
         console.log("req.file", req.file);
+        console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
         if (!params.PrinterName) {
             return res.badRequest({ code: 'ValidationError', message: '\"PrinterName\" is required' })
@@ -25,36 +26,19 @@ const PrinterController = {
         }
 
         let filePath;
-        // let pdfPath;
-
         try {
-            // const filePath = path.join(__dirname, '../Invoice Template Seablue.pdf');
-            // const filePath = path.join(__dirname, '..\\uploads\\file-1618899657067.pdf');
-            // filePath = path.join(__dirname, '/express-app/', req.file.path);
-
-            // development
-            // filePath = path.join(__dirname, '..\\', req.file.path);
-
-            // electron build 
-            filePath = path.join(__dirname, '../../', req.file.path);
-            console.log('__dirname', __dirname);
-            console.log(filePath);
-
-            // const buffer = fs.readFileSync(filePath);
-            // console.log('data type is: ' + typeof (buffer) + ', is buffer: ' + Buffer.isBuffer(buffer));
-            // pdfPath = path.join(__dirname, './' + Math.random().toString(36).substring(7) + 'Invoice Template Seablue.pdf');
-            // fs.writeFileSync(pdfPath, buffer, 'binary');
-
+            if (process.env.NODE_ENV === 'electron') {
+                // electron build 
+                filePath = path.join(__dirname, '../../', req.file.path);
+            } else {
+                // service build 
+                filePath = path.join(__dirname, '../', req.file.path);
+            }
+            console.log('filePath', filePath);
         } catch (error) {
             console.error(error);
             return res.badRequest(error);
         }
-
-        // const options = {
-        //     printer: 'HP LaserJet P2035',
-        //     unix: ['-o fit-to-page'],
-        //     win32: ['-print-settings "fit"'],
-        // };
 
         const options = {
             printer: params.PrinterName,
@@ -108,13 +92,15 @@ const PrinterController = {
         }
 
         let filePath;
-
         try {
-            // electron build 
-            filePath = path.join(__dirname, '../uploads/Invoice Template Seablue.pdf');
-            // console.log('__dirname', __dirname);
-            // console.log(filePath);
-
+            if (process.env.NODE_ENV === 'electron') {
+                // electron build 
+                filePath = path.join(__dirname, '../../uploads/Invoice Template Seablue.pdf');
+            } else {
+                // service build 
+                filePath = path.join(__dirname, '../uploads/Invoice Template Seablue.pdf');
+            }
+            console.log('filePath', filePath);
         } catch (error) {
             console.error(error);
             return res.badRequest(error);
@@ -122,8 +108,9 @@ const PrinterController = {
 
         const options = {
             printer: params.PrinterName,
+            paper: 'B5',
             unix: ['-o fit-to-page'],
-            win32: ['-print-settings "fit"'],
+            win32: ['-print-settings "paper=B5"'],
         };
 
         printer

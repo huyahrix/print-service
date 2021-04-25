@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "cross-env": "^7.0.3",
     "electron-builder": "^22.10.5",
-    "electron-pos-printer": "^1.2.4",
     "form-data": "^4.0.0",
     "lodash": "^4.17.20",
     "node": "^10.18.0",

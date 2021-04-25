@@ -52,7 +52,6 @@
 
   <script>
     let { remote } = require("electron");
-    const { PosPrinter } = remote.require("electron-pos-printer");
     const path = require("path");
     const axios = require('axios');
 
@@ -473,7 +472,7 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
             <div id='list_printers'></div>
             <br>
 
-            <p>Width</p>
+            <!-- <p>Width</p>
             <input type="radio" id="w1" name="width" value="140px">
             <label for="w1">140px</label><br>
 
@@ -487,7 +486,7 @@ BMm5daRb7Qj8B/kpJXClXf3jAAAAAElFTkSuQmCC" />
             <label for="w4">250px</label><br>
 
             <input type="radio" id="w5" name="width" value="300px">
-            <label for="w5">300px</label><br>
+            <label for="w5">300px</label><br> -->
           </form>
           <br>
           <input onclick="print()" type="button" value="printer test"
