@@ -43,7 +43,7 @@ const PrinterController = {
         const options = {
             printer: params.PrinterName,
             unix: ['-o fit-to-page'],
-            win32: ['-print-settings "fit"'],
+            win32: ['-print-settings "landscape"'],
         };
 
         printer
@@ -57,11 +57,11 @@ const PrinterController = {
             })
             .finally(() => {
                 console.info('unlinkSync ' + filePath);
-                try {
-                    fs.unlinkSync(filePath);
-                } catch (error) {
-                    console.error(error)
-                }
+                // try {
+                //     fs.unlinkSync(filePath);
+                // } catch (error) {
+                //     console.error(error)
+                // }
 
             });
     },
@@ -108,9 +108,8 @@ const PrinterController = {
 
         const options = {
             printer: params.PrinterName,
-            paper: 'B5',
             unix: ['-o fit-to-page'],
-            win32: ['-print-settings "paper=B5"'],
+            win32: ['-print-settings "landscape"'],
         };
 
         printer
